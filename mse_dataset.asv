@@ -1,0 +1,7 @@
+function [ mse ] = mse_dataset( weights, dataset )
+    for j=data',
+        point = j';
+        error_point(weights, po
+    end
+end
+
