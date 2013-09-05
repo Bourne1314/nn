@@ -16,8 +16,4 @@ function [ weights ] = train_dataset( dataset, rate )
         disp([ weights diff ]);
     end
     
-    slope = (-1) * ( weights(2) / weights(3) );
-    intercept = (-1) * ( weights(1) / weights(3) );
-    disp('slope and intercept');
-    disp([ slope, intercept ]);
 end

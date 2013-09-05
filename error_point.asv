@@ -1,4 +1,0 @@
-function [ error ] = error_point( weights, point )
-    
-end
-

@@ -7,4 +7,3 @@ function [ learning_rates mses ] = different_learning_rates( dataset )
         mses = [ mses curr_mse];
     end
 end
-
