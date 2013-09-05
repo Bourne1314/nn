@@ -1,6 +1,6 @@
 % Function   :  Perceptron 
 % 
-% Purpose    :  This function impliments a perceptron neural network to
+% Purpose    :  This function implements a perceptron neural network to
 % perform binary classification.
 % 
 % Parameters :  + data - the data points
