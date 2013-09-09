@@ -1,0 +1,4 @@
+x = linsep(:,1);
+y = linsep(:,2);
+group = linsep(:,3);
+gscatter(x,y,group,'br','xo')
