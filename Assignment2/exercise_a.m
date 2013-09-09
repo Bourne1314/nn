@@ -36,3 +36,6 @@ for i=1:numel(xl),
 	cond_prob_C2 = [ cond_prob_C2 prob];
 end
 
+prior_prob_C1 = C1_samples/total_samples;
+prior_prob_C2 = C2_samples/total_samples;
+
