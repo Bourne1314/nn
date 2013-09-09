@@ -30,7 +30,24 @@ conditionals = joint_probs ./ repmat(priors',1,size(joint_probs,2));
 % P(C1|X=x) = P(X=x|C1) P(C1)/ P(X=x)
 posteriors = ( conditionals .* repmat(priors',1,size(joint_probs,2)) ) ./ repmat(prob_x,2,1);
 
-% Plot the posterior probabilities
+% Plot the classes histogram
+figure, hold on
+    minx = min(data(3,:));
+    maxx = max(data(3,:));
+    miny = min(min(data(1:2,:)));
+    maxy = max(max(data(1:2,:)));
+    axis([minx maxx miny maxy]);
+	stairs(data(3,:), data(1,:), '-');
+	stairs(data(3,:), data(2,:), '-.');
+	xlab = xlabel('$$\overline{x}_{l}$$','FontSize',18,'FontWeight','bold');
+	ylab = ylabel('Number of samples','FontSize',18,'FontWeight','bold');
+	hleg1 = legend('C$$_{1}$$','C$$_{2}$$');
+	set(hleg1,'Interpreter','latex');
+	set(xlab,'Interpreter','latex');
+	set(ylab,'Interpreter','latex');
+hold off
+
+% Plot the posterior probabilities histogram
 figure, hold on
 	stairs(data(3,:), posteriors(1,:), '-');
 	stairs(data(3,:), posteriors(2,:), '-.');
