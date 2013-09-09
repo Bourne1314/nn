@@ -18,7 +18,7 @@
 %               + predicted_classes - the predicted class for every input
 % 
 
-function [weights, stopping_iteration, predicted_classes] = perceptron(data, class, learning_rate, iterations, plot_error)
+function [weights, stopping_iteration, predicted_classes] = perceptron_a1( data, class, learning_rate, iterations, plot_error)
 
     % Check if the plot_error argument is present. If it is not present, it
     % is set to 0 (false - do not plot)
@@ -81,19 +81,18 @@ function [weights, stopping_iteration, predicted_classes] = perceptron(data, cla
         % Calculate error
         error(i) = calculate_error(class, actual_response(:,i));
         
-        % The predicted classes are the last response calculated by
-        % the perceptron
-        predicted_classes = actual_response(:,i); 
-        
         % Only check for difference in epochs after a full first iteration 
-        % has completed        
+        % has completed
         if i > 1,            
             % Terminate is there is not difference between the epochs
             if (isequal(previous_weights, weights))
                 
                 % The perceptron converged
-                stopping_iteration = i;               
-                               
+                stopping_iteration = i;
+                
+                % The predicted classes are the last response calculated by
+                % the perceptron
+                predicted_classes = actual_response(:,i);                
                 break;
             end
         end 
@@ -114,16 +113,6 @@ function [weights, stopping_iteration, predicted_classes] = perceptron(data, cla
     
 end
 
-% Function   :  calculate_error 
-% 
-% Purpose    :  This function calculates the MSE between a set 
-%               of given classes and a set of predicted classes 
-% 
-% Parameters :  + real_class - the real, known classes for every data point
-%               + predicted_class - the predicted classes for every data point
-%
-% Return     :  The MSE between the real classes and the predicted
-%               classes
 function [error] = calculate_error(real_class, predicted_class)
    D = abs(real_class-predicted_class).^2;
    error = sum(D(:))/numel(real_class);
