@@ -35,7 +35,7 @@ figure, hold on
 	stairs(data(3,:), posteriors(1,:), '-');
 	stairs(data(3,:), posteriors(2,:), '-.');
 	xlab = xlabel('$$\overline{x}_{l}$$','FontSize',18,'FontWeight','bold');
-    ylab = ylabel('Posterior probability','FontSize',18,'FontWeight','bold');
+	ylab = ylabel('Posterior probability','FontSize',18,'FontWeight','bold');
 	hleg1 = legend('P(C$$_{1}$$ $$\|$$ $$\overline{x}_{l}$$)','P(C$$_{2}$$ $$\|$$ $$\overline{x}_{l}$$)');
 	set(hleg1,'Interpreter','latex');
 	set(xlab,'Interpreter','latex');
