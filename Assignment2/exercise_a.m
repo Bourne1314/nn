@@ -1,4 +1,4 @@
-% Initialize the data with the example for the lecture
+% Initialize the data with the example from the lecture
 data = [ 2 5 7 6 4 2 1 0 0; 0 0 0 1 3 3 5 4 2; 1 2 3 4 5 6 7 8 9 ];
 
 % Calculate the number of occurrences per class
@@ -32,11 +32,11 @@ posteriors = ( conditionals .* repmat(priors',1,size(joint_probs,2)) ) ./ repmat
 
 % Plot the classes histogram
 figure, hold on
-    minx = min(data(3,:));
-    maxx = max(data(3,:));
-    miny = min(min(data(1:2,:)));
-    maxy = max(max(data(1:2,:)));
-    axis([minx maxx miny maxy]);
+	minx = min(data(3,:));
+	maxx = max(data(3,:));
+	miny = min(min(data(1:2,:)));
+	maxy = max(max(data(1:2,:)));
+	axis([minx maxx miny maxy]);
 	stairs(data(3,:), data(1,:), '-');
 	stairs(data(3,:), data(2,:), '-.');
 	xlab = xlabel('$$\overline{x}_{l}$$','FontSize',18,'FontWeight','bold');
@@ -58,4 +58,3 @@ figure, hold on
 	set(xlab,'Interpreter','latex');
 	set(ylab,'Interpreter','latex');
 hold off
-
