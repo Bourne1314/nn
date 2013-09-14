@@ -1,0 +1,28 @@
+% Load the generated data file
+importfile('two_class_example_not_separable.dat');
+
+% Read the x and y coordinates from the data
+data = two_class_example_not_separable(:,1:2);
+
+% Read the classes from the data
+classes = two_class_example_not_separable(:,3);
+
+% Rea
+classes(classes == 0) = -1;
+
+% create a generalised linear model
+net = glm(2, 1, 'linear');
+
+% apply the model to data x
+y = glmfwd(net, data);
+
+% calculate the error
+error = glmerr(net, data, classes);
+
+options = foptions;
+options(1) = 0;
+options(14) = 10000;
+% train the network using the iterative reweighted least squares (IRLS) algorithm
+net = glmtrain(net, options, data, classes);
+
+plot_data_and_decision_boundary(data, classes, [net.b1 net.w1'])
