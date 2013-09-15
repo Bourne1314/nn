@@ -71,7 +71,7 @@ misclassified = sum(datatmp);
 misclassified
 
 % Find optimal decision boundary
-[min index] = min(sum(misclassified));
+[min index] = min(misclassified);
 index = index + 1;
 
 % Plot the posterior probabilities histogram with the decision boundary
