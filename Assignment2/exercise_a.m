@@ -75,9 +75,9 @@ misclassified_sum
 [min_ index] = min(misclassified_sum);
 index = index + 1;
 
-% Find decision boundary for double cost for misclassifying 'a'
-misclassified_double_cost_for_a = misclassified .* repmat([2 1]',1,9)
-[min_ index2] = min(sum(misclassified_double_cost_for_a))
+% Find decision boundary for double cost for misclassifying 'b'
+misclassified_double_cost_for_b = misclassified .* repmat([1 2]',1,9)
+[min_ index2] = min(sum(misclassified_double_cost_for_b))
 index2 = index2 + 1
 
 % Plot the posterior probabilities histogram with the decision boundary

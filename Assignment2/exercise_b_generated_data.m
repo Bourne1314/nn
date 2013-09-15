@@ -13,7 +13,6 @@ net = glm(2, 1, 'linear');
 % apply the model to data x
 y = glmfwd(net, data);
 
-% calculate the error
 options = foptions;
 options(1) = 0;
 % Number of iterations
@@ -25,5 +24,6 @@ net = glmtrain(net, options, data, classes);
 % plot the data and the decision boundary
 plot_data_and_decision_boundary(data, classes, [net.b1 net.w1'])
 
+% calculate the error
 error = glmerr(net, data, classes);
 error
