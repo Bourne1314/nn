@@ -60,13 +60,12 @@ figure, hold on
 hold off
 
 % Calculate decision boundary
-misclassified = [];
-for i=1:numel(posteriors(1,:)),
-	mis_a = sum(sums_by_x(i+1:end)-data(2,i+1:end));
-	mis_b = sum(sums_by_x(1:i)-data(1,1:i));
-	mis_by_class = [mis_a ; mis_b];
-	misclassified = [ misclassified mis_by_class ];
-end
+datatmp = data(1:2,:);
+rowtmp = fliplr(datatmp(1,:));
+datatmp(1,:) = [ 0 rowtmp(1:end-1) ];
+datatmp = cumsum(datatmp,2);
+datatmp(1,:) = fliplr(datatmp(1,:));
+misclassified = sum(datatmp);
 
 % Misclassifications by class at each decision boundary
 misclassified
