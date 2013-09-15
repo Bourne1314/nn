@@ -58,3 +58,37 @@ figure, hold on
 	set(xlab,'Interpreter','latex');
 	set(ylab,'Interpreter','latex');
 hold off
+
+% Calculate decision boundary
+misclassified = [];
+for i=1:numel(posteriors(1,:)),
+	mis_a = sum(sums_by_x(i+1:end)-data(2,i+1:end));
+	mis_b = sum(sums_by_x(1:i)-data(1,1:i));
+	mis_by_class = [mis_a ; mis_b];
+	misclassified = [ misclassified mis_by_class ];
+end
+
+% Misclassifications by class at each decision boundary
+misclassified
+
+% Find optimal decision boundary
+[min index] = min(sum(misclassified));
+index = index + 1;
+
+% Plot the posterior probabilities histogram with the decision boundary
+figure, hold on
+	stairs(data(3,:), posteriors(1,:), '-');
+	stairs(data(3,:), posteriors(2,:), '-.');
+	
+	y = 0:0.001:1;	
+	plot(index, y);
+	
+    tit = title('Decision boundary', 'FontSize',20,'FontWeight','bold');
+	xlab = xlabel('$$\overline{x}_{l}$$','FontSize',18,'FontWeight','bold');
+	ylab = ylabel('Posterior probability','FontSize',18,'FontWeight','bold');
+	hleg1 = legend('P(C$$_{1}$$ $$\|$$ $$\overline{x}_{l}$$)','P(C$$_{2}$$ $$\|$$ $$\overline{x}_{l}$$)');
+	set(tit,'Interpreter','latex');
+    set(hleg1,'Interpreter','latex');
+	set(xlab,'Interpreter','latex');
+	set(ylab,'Interpreter','latex');
+hold off
