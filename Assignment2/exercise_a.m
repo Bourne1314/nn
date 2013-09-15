@@ -80,8 +80,8 @@ figure, hold on
 	stairs(data(3,:), posteriors(1,:), '-');
 	stairs(data(3,:), posteriors(2,:), '-.');
 	
-	y = 0:0.001:1;	
-	plot(index, y);
+    % plot decision line
+	plot([index index], [0 1], 'r');
 	
     tit = title('Decision boundary', 'FontSize',20,'FontWeight','bold');
 	xlab = xlabel('$$\overline{x}_{l}$$','FontSize',18,'FontWeight','bold');
