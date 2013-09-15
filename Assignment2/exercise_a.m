@@ -65,14 +65,18 @@ rowtmp = fliplr(datatmp(1,:));
 datatmp(1,:) = [ 0 rowtmp(1:end-1) ];
 datatmp = cumsum(datatmp,2);
 datatmp(1,:) = fliplr(datatmp(1,:));
-misclassified = sum(datatmp);
+misclassified = datatmp;
+misclassified_sum = sum(misclassified);
 
 % Misclassifications by class at each decision boundary
-misclassified
+misclassified_sum
 
 % Find optimal decision boundary
-[min index] = min(misclassified);
+[min_ index] = min(misclassified_sum);
 index = index + 1;
+
+% Find decision boundary for double cost for misclassifying 'a'
+
 
 % Plot the posterior probabilities histogram with the decision boundary
 figure, hold on
