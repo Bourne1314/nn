@@ -11,7 +11,7 @@ classes = two_class_example_not_separable(:,3);
 classes(classes == 0) = -1;
 
 % create a generalised linear model with 2 inputs and 1 output
-net = glm(2, 1, 'linear');
+net = glm(2, 1, 'softmax');
 
 % apply the model to data x
 y = glmfwd(net, data);

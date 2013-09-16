@@ -8,7 +8,7 @@ data = generated_data(:,1:2);
 classes = generated_data(:,3);
 
 % create a generalised linear model
-net = glm(2, 1, 'linear');
+net = glm(2, 1, 'logistic');
 
 % apply the model to data x
 y = glmfwd(net, data);
