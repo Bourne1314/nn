@@ -65,6 +65,13 @@ for hidden_node = hidden_nodes,
     
 end
 
-% Show the errors
-errors
+avg_error = mean(errors,2);
 
+% Plot avg error vs hidden nodes
+figure; hold on
+set(gca,'XTick', 0:1:25);
+title('Average error of network per number of hidden nodes');
+xlabel('Number of hidden nodes');
+ylabel('Average network error');
+plot(hidden_nodes, avg_error, '-o');
+hold off
