@@ -23,7 +23,12 @@ data_test_indices = indices(10,:);
 
 for hidden_node = hidden_nodes,
     
+    % Store the nets for every cross validation set for this number of
+    % hidden nodes
     tmp_nets = [];
+    
+    % Store the error for every cross validation set for this number of
+    % hidden nodes
     tmp_errors = [];
     
     % Go through every training set
@@ -50,10 +55,16 @@ for hidden_node = hidden_nodes,
         tmp_errors = [tmp_errors error];
     end
     
+    % Store all the nets resulting from every complete run using a
+    % particular number of hidden nodes
     nets = [nets; tmp_nets];
+    
+    % Store all the errors resulting from every complete run using a
+    % particular number of hidden nodes
     errors = [errors; tmp_errors];
     
 end
 
+% Show the errors
 errors
 
