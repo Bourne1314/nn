@@ -11,6 +11,6 @@ for hidden_node = hidden_nodes,
     % train the network using the iterative reweighted least squares (IRLS) algorithm
     net = mlptrain(net, line.x, line.t, 100);
     
-    error = mlperr(net, line.x, line.t)
+    error = mlperr(net, line.x, line.t);
     
 end
