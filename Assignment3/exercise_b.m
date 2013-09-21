@@ -1,4 +1,4 @@
-function [] = exercise_b(pics, class, classGlass)
+function [errors avg_error] = exercise_b(pics, class, classGlass)
 
     hidden_nodes = [2,3,4,5,7,10,15,25];
 
@@ -9,7 +9,12 @@ function [] = exercise_b(pics, class, classGlass)
     % Separate the data into 10 different data sets. Indices(x) indicates that
     % element x belongs to a particular cross validation
     indices = crossvalind('Kfold',class,10);
-
+    
+    % Different selection strategy. 1st example of every person 
+    % to be in fold #1, the 2nd example of every person to be in fold #2 
+    % and so on
+    %indices = repmat([1:10],1,40);
+    
     % Split the indices for training ans test. 
     data_training_indices = [];
     data_test_indices = find(indices==10);
@@ -74,7 +79,9 @@ function [] = exercise_b(pics, class, classGlass)
 
     % Plot avg error vs hidden nodes
     figure; hold on
+    axis([0 25 0 1])
     set(gca,'XTick', 0:1:25);
+    set(gca,'YTick', 0:0.1:1);
     title('Average error of network per number of hidden nodes');
     xlabel('Number of hidden nodes');
     ylabel('Average network error');

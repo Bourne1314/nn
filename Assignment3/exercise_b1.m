@@ -1,2 +1,2 @@
 import_pics('data\pics.mat')
-exercise_b(pics, class, classGlass)
+[errors avg_error] = exercise_b(pics, class, classGlass);
