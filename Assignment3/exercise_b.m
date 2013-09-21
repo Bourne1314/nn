@@ -10,16 +10,18 @@ rng(10);
 % element x belongs to a particular cross validation
 indices = crossvalind('Kfold',class,10);
 
+% Split the indices for training ans test. 
+data_training_indices = [];
+data_test_indices = find(indices==10);
+
+for i=1:9,
+    tmp = find(indices==i);
+    data_training_indices = [data_training_indices tmp];
+end
+
 % To store the errors
 errors = [];
 nets = [];
-
-% Reshape for ease of use
-indices = reshape(indices(:,:),10,40);
-
-% Split the indices for training ans test. Each line is one training set
-data_training_indices = indices(1:9,:);
-data_test_indices = indices(10,:);
 
 for hidden_node = hidden_nodes,
     
@@ -42,14 +44,17 @@ for hidden_node = hidden_nodes,
         % Create neural net
         net = mlp(2576, hidden_node, 1, 'linear');
 
-        % Apply the model to data
-        y = mlpfwd(net, data);
-
         % Train the network using the iterative reweighted least squares (IRLS) algorithm
         net = mlptrain(net, data, classes, 100);
         
+        % Apply the model to data
+        y = mlpfwd(net, pics(data_test_indices,:));        
+        
+        % Calculate mean square error
+        error = mse_error(classGlass(data_test_indices), y);
+        
         % Calculate error of this network
-        error = mlperr(net, pics(data_test_indices,:), classGlass(data_test_indices));
+        %error = mlperr(net, pics(data_test_indices,:), classGlass(data_test_indices));
         
         tmp_nets = [tmp_nets net];        
         tmp_errors = [tmp_errors error];
