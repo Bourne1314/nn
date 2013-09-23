@@ -19,21 +19,19 @@ if ~isempty(errstring)
   error(errstring);
 end
 
-% Create a spherical Gaussian mixture model
-mix = gmm(net.nin, net.nhidden, 'spherical');
-
 % Initialise the parameters from the input data
 % Just use a small number of k means iterations
 kmoptions = zeros(1, 18);
 kmoptions(1) = -1;	% Turn off warnings
-kmoptions(14) = 5;  % Just 5 iterations to get centres roughly right
-mix = gmminit(mix, x, kmoptions);
+kmoptions(14) = 50;  % 50 iterations should do the trick
 
-% Train mixture model using EM algorithm
-[mix, options] = gmmem(mix, x, options);
+% Try a simple variant of k-means clustering....
+
+clusters = net.nhidden;
+centres = kmeans(rand(clusters,size(x,2)), x, kmoptions);
 
 % Now set the centres of the RBF from the centres of the mixture model
-net.c = mix.centres;
+net.c = centres
 
 % options(7) gives scale of function widths
 net = rbfsetfw(net, options(7));
