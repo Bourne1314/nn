@@ -15,5 +15,13 @@ y = data(:,2);
 gam = 10;
 sig2 = 0.4;
 type = 'c';
-[alpha,b] = trainlssvm({data,classes,'c',gam,sig2});
-plotlssvm({data,classes,'c',gam,sig2},{alpha,b});
+
+figure(1)
+% Without preprocessing
+[alpha,b] = trainlssvm({data,classes,'c',gam,sig2, 'RBF_kernel', 'original'});
+plotlssvm({data,classes,'c',gam,sig2, 'RBF_kernel', 'original'},{alpha,b});
+
+figure(2)
+% With preprocessing
+[alpha,b] = trainlssvm({data,classes,'c',gam,sig2, 'RBF_kernel', 'preprocess'});
+plotlssvm({data,classes,'c',gam,sig2, 'RBF_kernel', 'preprocess'},{alpha,b});
