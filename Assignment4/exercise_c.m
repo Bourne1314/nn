@@ -1,12 +1,10 @@
-% Load the generated data file
+% Using raw pics data 
 import_pics('data\pics.mat')
+[errors avg_error] = svmfunc(pics, class, classGlass);
 
-type = 'c';
-
-L_fold = 10; % L-fold crossvalidation
-
-[gam,sig2] = tunelssvm({pics,classGlass',type,[],[]},'simplex', 'crossvalidatelssvm',{L_fold,'misclass'});
-
-[alpha,b] = trainlssvm({pics,classGlass',type,gam,sig2});
-
-plotlssvm({pics,classGlass',type,gam,sig2},{alpha,b});
+% Using filtered pics
+% import_pics('data\filtered_pics.mat')
+% Multiply values by 10, because otherwise the values are too small and rbf
+% code netlab code complains
+% filtered_pics = filtered_pics * 10;
+% [errors avg_error] = rbfnet(filtered_pics, class, classGlass);
