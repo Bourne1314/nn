@@ -1,28 +1,22 @@
 function [errors avg_error] = exercise_b(pics, class, classGlass)
 
-    hidden_nodes = [2,3,4,5,7,10,15,25];
-
+    hidden_nodes = [2,3,4,5,7,10,15,25];   
+    
     classGlass = classGlass';
+
+    % The number of folds to use
+    number_of_folds = 10;
 
     % Reset the random seed
     rng(10);
     % Separate the data into 10 different data sets. Indices(x) indicates that
     % element x belongs to a particular cross validation
-    indices = crossvalind('Kfold',class,10);
-    
+    indices = crossvalind('Kfold', class, number_of_folds);
+
     % Different selection strategy. 1st example of every person 
     % to be in fold #1, the 2nd example of every person to be in fold #2 
     % and so on
     %indices = repmat([1:10],1,40);
-    
-    % Split the indices for training ans test. 
-    data_training_indices = [];
-    data_test_indices = find(indices==10);
-
-    for i=1:9,
-        tmp = find(indices==i);
-        data_training_indices = [data_training_indices tmp];
-    end
 
     % To store the errors
     errors = [];
@@ -39,28 +33,32 @@ function [errors avg_error] = exercise_b(pics, class, classGlass)
         tmp_errors = [];
 
         % Go through every training set
-        for i = data_training_indices',
+        for i = 1:number_of_folds,            
+
+            % Get the test data
+            test_indices = find(indices==i);
+            test_data = pics(test_indices,:);
+            test_classes = classGlass(test_indices);   
+
+            % Remove the test data from the training set data
+            data_indices = find(indices~=i);
 
             % With the indices get all the inputs for this particular set
-            data = pics(i,:);
+            training_data = pics(data_indices,:);
             % With the indices get all the classes for this particular set
-            classes = classGlass(i);
+            training_classes = classGlass(data_indices);
 
             % Create neural net
-            net = mlp(2576, hidden_node, 1, 'linear');
-
-            % Train the network using the iterative reweighted least squares (IRLS) algorithm
-            net = mlptrain(net, data, classes, 100);
+            net = mlp(2576, hidden_node, 1, 'linear');            
+            
+            % Train the network
+            net = mlptrain(net, training_data, training_classes, 100);
 
             % Apply the model to data
-            y = mlpfwd(net, pics(data_test_indices,:));        
+            y = mlpfwd(net, test_data);        
 
             % Calculate mean square error
-            error = mse_error(classGlass(data_test_indices), y);
-
-            % Calculate error of this network
-            %error = mlperr(net, pics(data_test_indices,:), classGlass(data_test_indices));
-
+            error = mse_error(test_classes, y);
             tmp_nets = [tmp_nets net];        
             tmp_errors = [tmp_errors error];
         end
