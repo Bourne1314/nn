@@ -1,10 +1,10 @@
 % Using raw pics data 
-%import_pics('data\pics.mat')
-%[errors avg_error] = svmfunc(pics, class, classGlass);
+import_pics('data\pics.mat')
+[errors avg_error] = svmfunc(pics, class, classGlass);
 
 % Using filtered pics
- import_pics('data\filtered_pics.mat')
+ %import_pics('data\filtered_pics.mat')
 % Multiply values by 10, because otherwise the values are too small and rbf
 % code netlab code complains
- filtered_pics = filtered_pics * 10;
- [errors avg_error] = svmfunc(filtered_pics, class, classGlass);
+ %filtered_pics = filtered_pics * 10;
+ %[errors avg_error] = svmfunc(filtered_pics, class, classGlass);
