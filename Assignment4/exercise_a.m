@@ -1,6 +1,6 @@
 % Using raw pics data 
 import_pics('data\pics.mat')
-[errors avg_error] = rbfnet(filtered_pics, class, classGlass);
+[errors avg_error] = rbfnet(pics, class, classGlass);
 
 % Using filtered pics
 % import_pics('data\filtered_pics.mat')
