@@ -68,7 +68,6 @@ if (options(16) > alpha_first | options(16) < 0)
 else
     alpha_last = options(16);
 end
-
 % Neighbourhood size
 if (options(17) >= 0)
     nsize_first = options(17);
@@ -93,7 +92,9 @@ tempw = sompak(net);
 
 % Then carry out training
 j = 1;
+
 while j <= niters
+
     if options(6)
 	% Batch version of algorithm
 	alpha = 0.0;
@@ -123,14 +124,15 @@ while j <= niters
 	    pnum = ceil(rand(ndata, 1).*ndata);
 	else
 	    pnum = 1:ndata;
-	end
+    end
 	% Cycle through dataset
 	for k = 1:ndata
 	    % Fraction done
 	    frac_done = (((niters+1)*ndata)-(j*ndata + k))/((niters+1)*ndata);
 	    % Compute learning rate
 	    alpha = (alpha_first - alpha_last)*frac_done + alpha_last;
-	    % Compute neighbourhood
+        
+        % Compute neighbourhood
 	    nsize = round((nsize_first - nsize_last)*frac_done + nsize_last);
 	    % Find best node
 	    pat_diff = ones(net.num_nodes, 1)*x(pnum(k), :) - tempw;
