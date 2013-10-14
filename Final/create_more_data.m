@@ -16,17 +16,17 @@ for i=1:2:n,
        new_x = a + ((rand*(b-a)) + 1) ;
        
        % Introduce noise
-       new_x = new_x + rand(47,1);
+       new_x = new_x + rand(47,1) - rand(47,1);
 
        % Data offset
        a = y - 20;
        b = y + 20;
        % Y coordinates for new person with random offset regarding the
        % representative person
-       new_y = a + ((rand*(b-a)) + 1) - rand(47,1) ;
+       new_y = a + ((rand*(b-a)) + 1)  ;
        
        % Introduce noise
-       new_y = new_y + rand(47,1) - + rand(47,1);
+       new_y = new_y + rand(47,1) - rand(47,1);
        
        % Add new people to the dataset
        data = [data new_x new_y];
