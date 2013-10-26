@@ -56,20 +56,27 @@ for i=1:2:n,
 end
 
 % % Calculate angle of movement
-% angle_of_movement = [];
-% 
-% for i=1:2:n,
-%     x = data(:,i);
-%     y = data(:,i+1);
-%     
-%     angle = [];
-%     
-%     for j=1:size(x,1),
-%         angle = [angle; atan2(y/x,dot(y,x))];
-%     end
-%     
-%     angle_of_movement = [angle_of_movement angle];
-% end
+angle_of_movement = [];
+
+for i=1:2:n,
+    x = data(:,i);
+    y = data(:,i+1);
+    
+    angle = [];
+    
+    for j=1:size(x,1)-1,
+        
+        dx = x(j+1)-x(j);
+        dy = y(j+1)-y(j);
+        
+        angle = [angle; atan(dy/dx)];
+    end
+    
+    % Add zero angle to the last timestep (they stopped)
+    angle = [angle; 0];
+    
+    angle_of_movement = [angle_of_movement angle];
+end
 
 % Calculate speed of movement
 speed = [];
