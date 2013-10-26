@@ -3,7 +3,7 @@ m = size(data,1);
 % Number of columns
 n = size(data,2);
 
-% Generate random people around the initial people
+'Generate random people around the initial people'
 for i=1:2:n,
     x = data(:,i);
     y = data(:,i+1);
@@ -39,7 +39,7 @@ n = size(data,2);
 source_panic = [542, 361];
 source_matrix = repmat(source_panic,47,1);
 
-% Calculate distance to panic source
+'Calculate distance to panic source'
 distance_to_source = [];
 
 for i=1:2:n,
@@ -55,7 +55,7 @@ for i=1:2:n,
     distance_to_source = [distance_to_source distance];
 end
 
-% % Calculate angle of movement
+'Calculate angle of movement'
 angle_of_movement = [];
 
 for i=1:2:n,
@@ -78,7 +78,7 @@ for i=1:2:n,
     angle_of_movement = [angle_of_movement angle];
 end
 
-% Calculate speed of movement
+'Calculate speed of movement'
 speed = [];
 
 for i=1:2:n,
@@ -101,7 +101,7 @@ end
 max_y = 800;
 points = [546.8, max_y-478.0; 507.5, max_y-330.6; 240.6, max_y-218.6; 184.7, max_y-331.3];
 
-% Calculate distance to buildings
+'Calculate distance to buildings'
 % 4 columns per user (1st is distance to 1st building, 2nd to 2nd, etc...)
 distance_to_building = [];
     
@@ -121,4 +121,24 @@ for i=1:2:n,
 
         distance_to_building = [distance_to_building distance];
     end
+end
+
+'Difference in angle of movement'
+diff_angle_of_movement = [];
+
+for i=2:n/2,
+    prev = angle_of_movement(:,i-1);
+    curr = angle_of_movement(:,i);
+    
+    diff = curr - prev;
+    
+    diff_angle_of_movement = [diff_angle_of_movement diff];
+end
+
+'Average speed from beginning'
+avg_speed_from_beginning = speed(1,:);
+
+for i=2:47,
+    curr = mean(speed(2:i,:));
+    avg_speed_from_beginning(end+1,:) = curr;
 end
