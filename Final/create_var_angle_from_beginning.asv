@@ -1,0 +1,10 @@
+function [ output_args ] = create_var_angle_from_beginning( input_args )
+speed(1,:);
+
+for i=2:47,
+    curr = var(speed(2:i,:));
+    var_angle_from_beginning(end+1,:) = curr;
+end
+
+end
+

@@ -40,122 +40,32 @@ source_panic = [542, 361];
 source_matrix = repmat(source_panic,47,1);
 
 'Calculate distance to panic source'
-distance_to_source = [];
-
-for i=1:2:n,
-    x = data(:,i);
-    y = data(:,i+1);
-    
-    distance = [];
-    
-    for j=1:size(x,1),
-        distance = [distance; norm(source_panic - [x(j) y(j)])];
-    end
-    
-    distance_to_source = [distance_to_source distance];
-end
+distance_to_source = create_distance_to_source(data, source_panic);
 
 'Calculate angle of movement'
-angle_of_movement = [];
-
-for i=1:2:n,
-    x = data(:,i);
-    y = data(:,i+1);
-    
-    angle = [];
-    
-    for j=1:size(x,1)-1,
-        
-        dx = x(j+1)-x(j);
-        dy = y(j+1)-y(j);
-        
-        angle = [angle; atan(dy/dx)];
-    end
-    
-    % Add zero angle to the last timestep (they stopped)
-    angle = [angle; 0];
-    
-    angle_of_movement = [angle_of_movement angle];
-end
+angle_of_movement = create_angle_of_movement(data);
 
 'Calculate speed of movement'
-speed = [];
-
-for i=1:2:n,
-    x = data(:,i);
-    y = data(:,i+1);
-    
-    sp = [];
-    
-    for j=1:m-1,
-        tmp = (max(x(j),x(j+1))-min(x(j),x(j+1)))+(max(y(j),y(j+1))-min(y(j),y(j+1)));
-        sp = [sp; tmp];
-    end
-    
-    % Add zero speed to the last time (they stopped)
-    sp = [sp; 0];
-    
-    speed = [speed sp];
-end
-
-max_y = 800;
-points = [546.8, max_y-478.0; 507.5, max_y-330.6; 240.6, max_y-218.6; 184.7, max_y-331.3];
+speed = create_speed(data);
 
 'Calculate distance to buildings'
+
 % 4 columns per user (1st is distance to 1st building, 2nd to 2nd, etc...)
-distance_to_building = [];
-    
-for i=1:2:n,
-    x = data(:,i);
-    y = data(:,i+1);
+distance_to_building = create_distance_to_buildings(data);
 
-    for h=1:4,
-        p_x = points(h,1); 
-        p_y = points(h,2);
-
-        distance = [];
-
-        for j=1:size(x,1),
-            distance = [distance; norm([p_x p_y] - [x(j) y(j)])];
-        end
-
-        distance_to_building = [distance_to_building distance];
-    end
-end
 
 'Difference in angle of movement'
-diff_angle_of_movement = [];
-
-for i=2:size(data,1),
-    prev = angle_of_movement(i-1,:);
-    curr = angle_of_movement(i,:);
-    
-    diff = curr - prev;
-    
-    diff_angle_of_movement(i,:) =  diff;
-end
-size(data,2)
-diff_angle_of_movement(size(data,1), :) = zeros(1, (size(data,2)/2));
+diff_angle_of_movement = create_diff_angle_of_movement(data, angle_of_movement);
 
 'Average speed from beginning'
-avg_speed_from_beginning = speed(1,:);
-
-for i=2:47,
-    curr = mean(speed(2:i,:));
-    avg_speed_from_beginning(end+1,:) = curr;
-end
+avg_speed_from_beginning = create_avg_speed_from_beginning(speed);
 
 'Average speed in the last w timesteps'
 w = 5;
 avg_speed_w = create_avg_speed_w(data,speed,w);
 
 'Total variance of angle from beginning'
-var_angle_from_beginning = speed(1,:);
-
-for i=2:47,
-    curr = var(speed(2:i,:));
-    var_angle_from_beginning(end+1,:) = curr;
-end
+var_angle_from_beginning = create_var_angle_from_beginning(angle_of_movement, speed);
 
 'variance of angle in the last w timesteps'
 var_angle_w = create_var_angle_w(data,angle_of_movement,w);
@@ -165,65 +75,10 @@ k = 4;
 centroids = create_centroids(data,k)
 
 'angles and distance toward centroids'
-angles_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
-distance_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
-for j=1:size(data,1),
-    % cycle trough time steps
-
-    for i=1:(size(data,2)/2),
-        % cycle trough points, regardless of time step
-        x = data(j,(i*2)-1);
-        y = data(j,i*2);
-    
-        angle = [];
-        for c = 1:k,
-            % cycle trough the centroids
-            dx = x - centroids(j,(c*2)-1);
-            dy = y - centroids(j,(c*2));
-            
-            distance_toward_centroids(j,i) = sqrt(dx^2 + dy^2);
-            
-            angle = atan(dy/dx);
-            
-            index = i * k + c;
-            angles_toward_centroids(j,index) = angle;
-
-        end
-    end
-    
-    % Add zero angle to the last timestep (they stopped)
-    
-end
+[ angles_toward_centroids distance_toward_centroids ] = create_angles_and_distances_toward_centroids(data, centroids);
 
 'angles and distance toward global center of mass'
-angles_toward_center_of_mass = zeros(size(data,1),(size(data,2)/2));
-distance_toward_center_of_mass = zeros(size(data,1),(size(data,2)/2));
-for j=1:size(data,1),
-    % cycle trough time steps
-    xs = data(j,(1:2:size(data,2)));
-    ys = data(j,(1:2:size(data,2))+1);
-    
-    center_x = mean(xs);
-    center_y = mean(ys);
-    
-    for i=1:(size(data,2)/2),
-        % cycle trough agents
-        x = data(j,(i*2)-1);
-        y = data(j,i*2);
-    
-        dx = x - center_x;
-        dy = y - center_y;
-        
-        distance_toward_center_of_mass(j,i) = sqrt(dx^2 + dy^2);
-        
-        angle = atan(dy/dx);
-        
-        angles_toward_center_of_mass(j,i) = angle;
-    end
-    
-    % Add zero angle to the last timestep (they stopped)
-    
-end
+[ angles_toward_center_of_mass distance_toward_center_of_mass ] = create_angles_and_distances_toward_center_of_mass(data);
 
 'global mean speed'
 global_mean_speed = mean(speed,2);
