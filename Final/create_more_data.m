@@ -142,3 +142,150 @@ for i=2:47,
     curr = mean(speed(2:i,:));
     avg_speed_from_beginning(end+1,:) = curr;
 end
+
+'Average speed in the last w timesteps'
+w = 5;
+avg_speed_w = speed(1,:);
+
+for i=2:47,
+    w_start = max([1 (i - w)]);
+    curr = mean(speed(w_start:i,:));
+    avg_speed_w(end+1,:) = curr;
+end
+
+'Total variance of angle from beginning'
+var_angle_from_beginning = speed(1,:);
+
+for i=2:47,
+    curr = var(speed(2:i,:));
+    var_angle_from_beginning(end+1,:) = curr;
+end
+
+'variance of angle in the last w timesteps'
+var_angle_w = zeros(1,size(angle_of_movement,2));
+
+for i=2:47,
+    w_start = max([1 (i - w)]);
+    curr = var(angle_of_movement(w_start:i,:));
+    var_angle_w(end+1,:) = curr;
+end
+
+'centroids'
+k = 4;
+centroids = zeros(0,2*k);
+for i=1:47,
+    x1 = data(i,(1:2:size(data,2)));
+    y1 = data(i,(1:2:size(data,2))+1);
+    indexes = [];
+    for j=1:k,
+        % get random point as centroid
+        indexes = [indexes ceil(rand*(size(data,2)/2))];
+    end
+    centroids_x = x1(:,indexes);
+    centroids_y = y1(:,indexes);
+    init_centroids = [centroids_x' centroids_y'];
+    points = [x1' y1'];
+    options = zeros();
+    options(14) = 1000; % number of iterations
+    curr_centroids = kmeans(init_centroids, points, options);
+    curr_centroids_flat = reshape(curr_centroids,1,2*k);
+    centroids = [centroids ; curr_centroids_flat];
+end
+
+'angles toward centroids'
+angles_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
+for j=1:size(data,1),
+    % cycle trough time steps
+
+    for i=1:(size(data,2)/2),
+        % cycle trough points, regardless of time step
+        x = data(j,(i*2)-1);
+        y = data(j,i*2);
+    
+        angle = [];
+        for c = 1:k,
+            % cycle trough the centroids
+            dx = x - centroids(j,(c*2)-1);
+            dy = y - centroids(j,(c*2));
+
+            angle = atan(dy/dx);
+            
+            index = i * k + c;
+            angles_toward_centroids(j,index) = angle;
+
+        end
+    end
+    
+    % Add zero angle to the last timestep (they stopped)
+    
+end
+
+'angles and distance toward global center of mass'
+angles_toward_center_of_mass = zeros(size(data,1),(size(data,2)/2));
+distance_toward_center_of_mass = zeros(size(data,1),(size(data,2)/2));
+for j=1:size(data,1),
+    % cycle trough time steps
+    xs = data(j,(1:2:size(data,2)));
+    ys = data(j,(1:2:size(data,2))+1);
+    
+    center_x = mean(xs);
+    center_y = mean(ys);
+    
+    for i=1:(size(data,2)/2),
+        % cycle trough agents
+        x = data(j,(i*2)-1);
+        y = data(j,i*2);
+    
+        dx = x - center_x;
+        dy = y - center_y;
+        
+        distance_toward_center_of_mass(j,i) = sqrt(dx^2 + dy^2);
+        
+        angle = atan(dy/dx);
+        
+        angles_toward_center_of_mass(j,i) = angle;
+    end
+    
+    % Add zero angle to the last timestep (they stopped)
+    
+end
+
+'global mean speed'
+global_mean_speed = mean(speed,2);
+
+'distance and angle from nearest agent'
+distance_from_nearest_agent = zeros(size(data,1),(size(data,2)/2));
+angle_from_nearest_agent = zeros(size(data,1),(size(data,2)/2));
+
+for j=1:size(data,1),
+    % cycle trough time steps
+    xs = data(j,(1:2:size(data,2)));
+    ys = data(j,(1:2:size(data,2))+1);
+        
+    for i=1:(size(data,2)/2),
+        % cycle trough agents
+        curr = [xs(i) ys(i)];
+
+        % copies
+        others_xs = xs;
+        others_ys = ys;
+        
+        % and removal of the element
+        others_xs(i) = [];
+        others_ys(i) = [];
+        
+        others = [others_xs' others_ys'];
+        nearest_index = dsearchn(others,curr);
+        nearest = others(nearest_index,:);
+
+        dx = xs(i) - nearest(1);
+        dy = ys(i) - nearest(2);
+        
+        distance_from_nearest_agent(j,i) = sqrt(dx^2 + dy^2);
+
+        angle = atan(dy/dx);
+        angle_from_nearest_agent(j,i) = angle;
+    end
+end
+
+'all done.'
