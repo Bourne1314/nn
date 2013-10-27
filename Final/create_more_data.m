@@ -126,14 +126,16 @@ end
 'Difference in angle of movement'
 diff_angle_of_movement = [];
 
-for i=1:n/2,
-    prev = angle_of_movement(:,i-1);
-    curr = angle_of_movement(:,i);
+for i=2:size(data,1),
+    prev = angle_of_movement(i-1,:);
+    curr = angle_of_movement(i,:);
     
     diff = curr - prev;
     
     diff_angle_of_movement = [diff_angle_of_movement diff];
 end
+size(data,2)
+diff_angle_of_movement = [ diff_angle_of_movement zeros(1, size(data,2)) ];
 
 'Average speed from beginning'
 avg_speed_from_beginning = speed(1,:);
