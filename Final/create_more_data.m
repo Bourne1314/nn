@@ -124,7 +124,7 @@ for i=1:2:n,
 end
 
 'Difference in angle of movement'
-diff_angle_of_movement;
+diff_angle_of_movement = [];
 
 for i=2:size(data,1),
     prev = angle_of_movement(i-1,:);
