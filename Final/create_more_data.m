@@ -1,40 +1,5 @@
-% Number of samples
-m = size(data,1);
-% Number of columns
-n = size(data,2);
-
 'Generate random people around the initial people'
-for i=1:2:n,
-    x = data(:,i);
-    y = data(:,i+1);
-    for j=1:20,
-       % Data offset
-       a = x - 20;
-       b = x + 20;
-       % X coordinates for new person with random offset regarding the
-       % representative person
-       new_x = a + ((rand*(b-a)) + 1) ;
-       
-       % Introduce noise
-       new_x = new_x + rand(47,1) - rand(47,1);
-
-       % Data offset
-       a = y - 20;
-       b = y + 20;
-       % Y coordinates for new person with random offset regarding the
-       % representative person
-       new_y = a + ((rand*(b-a)) + 1)  ;
-       
-       % Introduce noise
-       new_y = new_y + rand(47,1) - rand(47,1);
-       
-       % Add new people to the dataset
-       data = [data new_x new_y];
-    end
-end
-
-% New number of columns
-n = size(data,2);
+data = create_more_only_data(data);
 
 source_panic = [542, 361];
 source_matrix = repmat(source_panic,47,1);
@@ -84,38 +49,6 @@ centroids = create_centroids(data,k)
 global_mean_speed = mean(speed,2);
 
 'distance and angle from nearest agent'
-distance_from_nearest_agent = zeros(size(data,1),(size(data,2)/2));
-angle_from_nearest_agent = zeros(size(data,1),(size(data,2)/2));
-
-for j=1:size(data,1),
-    % cycle trough time steps
-    xs = data(j,(1:2:size(data,2)));
-    ys = data(j,(1:2:size(data,2))+1);
-        
-    for i=1:(size(data,2)/2),
-        % cycle trough agents
-        curr = [xs(i) ys(i)];
-
-        % copies
-        others_xs = xs;
-        others_ys = ys;
-        
-        % and removal of the element
-        others_xs(i) = [];
-        others_ys(i) = [];
-        
-        others = [others_xs' others_ys'];
-        nearest_index = dsearchn(others,curr);
-        nearest = others(nearest_index,:);
-
-        dx = xs(i) - nearest(1);
-        dy = ys(i) - nearest(2);
-        
-        distance_from_nearest_agent(j,i) = sqrt(dx^2 + dy^2);
-
-        angle = atan(dy/dx);
-        angle_from_nearest_agent(j,i) = angle;
-    end
-end
+[distance_from_nearest_agent angle_from_nearest_agent ] = create_distance_and_angle_from_nearest_agent(data);
 
 'all done.'
