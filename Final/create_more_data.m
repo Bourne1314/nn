@@ -124,7 +124,7 @@ for i=1:2:n,
 end
 
 'Difference in angle of movement'
-diff_angle_of_movement = [];
+diff_angle_of_movement;
 
 for i=2:size(data,1),
     prev = angle_of_movement(i-1,:);
@@ -132,10 +132,10 @@ for i=2:size(data,1),
     
     diff = curr - prev;
     
-    diff_angle_of_movement = [diff_angle_of_movement diff];
+    diff_angle_of_movement(i,:) =  diff;
 end
 size(data,2)
-diff_angle_of_movement = [ diff_angle_of_movement zeros(1, size(data,2)) ];
+diff_angle_of_movement(size(data,1), :) = zeros(1, (size(data,2)/2));
 
 'Average speed from beginning'
 avg_speed_from_beginning = speed(1,:);
@@ -194,8 +194,9 @@ for i=1:47,
     centroids = [centroids ; curr_centroids_flat];
 end
 
-'angles toward centroids'
+'angles and distance toward centroids'
 angles_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
+distance_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
 for j=1:size(data,1),
     % cycle trough time steps
 
@@ -209,7 +210,9 @@ for j=1:size(data,1),
             % cycle trough the centroids
             dx = x - centroids(j,(c*2)-1);
             dy = y - centroids(j,(c*2));
-
+            
+            distance_toward_centroids(j,i) = sqrt(dx^2 + dy^2);
+            
             angle = atan(dy/dx);
             
             index = i * k + c;
