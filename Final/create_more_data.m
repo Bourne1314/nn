@@ -147,13 +147,7 @@ end
 
 'Average speed in the last w timesteps'
 w = 5;
-avg_speed_w = speed(1,:);
-
-for i=2:47,
-    w_start = max([1 (i - w)]);
-    curr = mean(speed(w_start:i,:));
-    avg_speed_w(end+1,:) = curr;
-end
+avg_speed_w = create_avg_speed_w(data,speed,w);
 
 'Total variance of angle from beginning'
 var_angle_from_beginning = speed(1,:);
@@ -164,35 +158,11 @@ for i=2:47,
 end
 
 'variance of angle in the last w timesteps'
-var_angle_w = zeros(1,size(angle_of_movement,2));
-
-for i=2:47,
-    w_start = max([1 (i - w)]);
-    curr = var(angle_of_movement(w_start:i,:));
-    var_angle_w(end+1,:) = curr;
-end
+var_angle_w = create_var_angle_w(data,angle_of_movement,w);
 
 'centroids'
 k = 4;
-centroids = zeros(0,2*k);
-for i=1:47,
-    x1 = data(i,(1:2:size(data,2)));
-    y1 = data(i,(1:2:size(data,2))+1);
-    indexes = [];
-    for j=1:k,
-        % get random point as centroid
-        indexes = [indexes ceil(rand*(size(data,2)/2))];
-    end
-    centroids_x = x1(:,indexes);
-    centroids_y = y1(:,indexes);
-    init_centroids = [centroids_x' centroids_y'];
-    points = [x1' y1'];
-    options = zeros();
-    options(14) = 1000; % number of iterations
-    curr_centroids = kmeans(init_centroids, points, options);
-    curr_centroids_flat = reshape(curr_centroids,1,2*k);
-    centroids = [centroids ; curr_centroids_flat];
-end
+centroids = create_centroids(data,k)
 
 'angles and distance toward centroids'
 angles_toward_centroids = zeros(size(data,1),k*(size(data,2)/2));
