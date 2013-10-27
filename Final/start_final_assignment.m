@@ -24,19 +24,19 @@ number_of_agents = size(data,2)/2;
 
 % pre-process data (mirror all people over y-axis, !only if not already done!)
 
-% if data(1,2) > max_y/2
-% 
-%   for i = 1:end_time
-% 
-%     for a = 1:size(data(1,:),2)/2
-% 
-%       data(i,2*a) = max_y-data(i,2*a);
-% 
-%     end
-% 
-%   end
-% 
-% end
+if data(1,2) > max_y/2
+
+  for i = 1:end_time
+
+    for a = 1:size(data(1,:),2)/2
+
+      data(i,2*a) = max_y-data(i,2*a);
+
+    end
+
+  end
+
+end
 
 
 
