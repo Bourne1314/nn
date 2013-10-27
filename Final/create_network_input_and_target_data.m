@@ -6,3 +6,6 @@ for i=1:size(data,2)/2,
    target_value = [ target_value; speed(:,i) angle_of_movement(:,i)];
 end
 
+% Replace NaNs with 0s
+input_data(isnan(input_data))=0;
+target_value(isnan(target_value))=0;
