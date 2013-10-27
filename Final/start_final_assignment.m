@@ -24,19 +24,19 @@ number_of_agents = size(data,2)/2;
 
 % pre-process data (mirror all people over y-axis, !only if not already done!)
 
-if data(1,2) > max_y/2
-
-  for i = 1:end_time
-
-    for a = 1:size(data(1,:),2)/2
-
-      data(i,2*a) = max_y-data(i,2*a);
-
-    end
-
-  end
-
-end
+% if data(1,2) > max_y/2
+% 
+%   for i = 1:end_time
+% 
+%     for a = 1:size(data(1,:),2)/2
+% 
+%       data(i,2*a) = max_y-data(i,2*a);
+% 
+%     end
+% 
+%   end
+% 
+% end
 
 
 
@@ -141,5 +141,5 @@ axis([0 max_x+1 0 max_y+1]);
       % draw person
       plot(data(i,(2*a)-1),data(i,(2*a)),'Color',[0 0 1],'Marker','.','MarkerSize',10);
   end
-  pause(0.01);
+  pause(0.001);
 end
