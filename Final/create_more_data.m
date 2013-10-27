@@ -126,7 +126,7 @@ end
 'Difference in angle of movement'
 diff_angle_of_movement = [];
 
-for i=2:n/2,
+for i=1:n/2,
     prev = angle_of_movement(:,i-1);
     curr = angle_of_movement(:,i);
     
