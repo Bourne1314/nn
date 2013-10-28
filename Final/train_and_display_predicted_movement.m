@@ -49,6 +49,8 @@ rand_idx = randperm(size(train_input_data,1));
 train_input_data = train_input_data(rand_idx,:);
 train_target_value = train_target_value(rand_idx,:);
 
+train_input_data = zscore(train_input_data);
+
 % Create neural net
 net = mlp(size(train_input_data,2), 24, size(train_target_value,2), 'linear');            
 
@@ -77,6 +79,8 @@ for i=test_indices,
        ];
    
    test_input_data(isnan(test_input_data))=0;
+   
+   test_input_data = zscore(train_input_data);
    
    all_y = [all_y mlpfwd(net, test_input_data)]; 
    
