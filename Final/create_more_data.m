@@ -49,6 +49,6 @@ centroids = create_centroids(data,k)
 global_mean_speed = mean(speed,2);
 
 'distance and angle from nearest agent'
-[distance_from_nearest_agent angle_from_nearest_agent ] = create_distance_and_angle_from_nearest_agent(data);
+[ distance_from_nearest_agent angle_from_nearest_agent ] = create_distance_and_angle_from_nearest_agent(data);
 
 'all done.'
